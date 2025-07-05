@@ -13,7 +13,7 @@ namespace TAMHR.Hangfire.Schedulers
             _logger = logger;
         }
 
-        public async Task ExecuteAsync()
+        public void ExecutesSync()
         {
             _logger.LogInformation("DataSyncJob started at {StartTime}", DateTime.UtcNow);
 
@@ -22,7 +22,7 @@ namespace TAMHR.Hangfire.Schedulers
                 using var scope = _scopeFactory.CreateScope();
                 var dataSyncService = scope.ServiceProvider.GetRequiredService<IDataSyncService>();
                 
-                await dataSyncService.ExecuteSyncAsync();
+                dataSyncService.ExecuteSync();
                 
                 _logger.LogInformation("DataSyncJob completed successfully at {EndTime}", DateTime.UtcNow);
             }

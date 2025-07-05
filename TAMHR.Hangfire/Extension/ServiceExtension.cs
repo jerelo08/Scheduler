@@ -42,8 +42,7 @@ namespace TAMHR.Hangfire.Extension
             services.AddScoped<IModelMapper, ModelMapper>();
             services.AddScoped<IApiClientService, ApiClientService>();
             services.AddScoped<IDataSyncService, DataSyncService>();
-            services.AddScoped<ISqlLogService, SqlLogService>();
-            services.AddScoped<DataSyncJob>();
+            services.AddTransient<DataSyncJob>();
         }
     }
 }

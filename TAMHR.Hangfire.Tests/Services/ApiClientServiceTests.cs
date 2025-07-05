@@ -14,7 +14,6 @@ namespace TAMHR.Hangfire.Tests.Services
         private readonly Mock<HttpMessageHandler> _mockHttpMessageHandler;
         private readonly Mock<ILogger<ApiClientService>> _mockLogger;
         private readonly Mock<IModelMapper> _mockMapper;
-        private readonly Mock<ISqlLogService> _mockSqlLogService;
         private readonly HttpClient _httpClient;
         private readonly SyncConfiguration _config;
         private readonly ApiClientService _service;
@@ -24,7 +23,6 @@ namespace TAMHR.Hangfire.Tests.Services
             _mockHttpMessageHandler = new Mock<HttpMessageHandler>();
             _mockLogger = new Mock<ILogger<ApiClientService>>();
             _mockMapper = new Mock<IModelMapper>();
-            _mockSqlLogService = new Mock<ISqlLogService>();
             _httpClient = new HttpClient(_mockHttpMessageHandler.Object);
             
             _config = new SyncConfiguration
@@ -45,7 +43,7 @@ namespace TAMHR.Hangfire.Tests.Services
                 ApiTimeout = 30
             };
 
-            _service = new ApiClientService(_httpClient, _config, _mockLogger.Object, _mockMapper.Object, _mockSqlLogService.Object);
+            _service = new ApiClientService(_httpClient, _config, _mockLogger.Object, _mockMapper.Object);
         }
 
         [Fact]
@@ -81,7 +79,7 @@ namespace TAMHR.Hangfire.Tests.Services
             var result = await _service.SendUsersAsync(users);
 
             // Assert
-            Assert.True(result);
+            Assert.True(result == HttpStatusCode.OK);
             _mockMapper.Verify(m => m.MapToDto(users), Times.Once);
         }
 
@@ -118,7 +116,7 @@ namespace TAMHR.Hangfire.Tests.Services
             var result = await _service.SendUsersAsync(users);
 
             // Assert
-            Assert.False(result);
+            Assert.False(result == HttpStatusCode.BadRequest);
         }
 
         [Fact]
@@ -149,7 +147,7 @@ namespace TAMHR.Hangfire.Tests.Services
             var result = await _service.SendUsersAsync(users);
 
             // Assert
-            Assert.False(result);
+            Assert.False(result == HttpStatusCode.UnprocessableEntity);
         }
 
         [Fact]
@@ -234,7 +232,7 @@ namespace TAMHR.Hangfire.Tests.Services
             var result = await _service.SendEventsCalendarAsync(events);
 
             // Assert
-            Assert.True(result);
+            Assert.True(result == HttpStatusCode.OK);
         }
 
         protected virtual void Dispose(bool disposing)

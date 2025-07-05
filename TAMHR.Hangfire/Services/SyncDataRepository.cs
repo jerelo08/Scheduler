@@ -37,7 +37,7 @@ namespace TAMHR.Hangfire.Services
             
             var query = $@"
                 SELECT Id, NoReg, Username, Name, Gender, Email, IsActive
-                FROM Users
+                FROM MDM_USER
                 WHERE 1=1 {excludeClause}
                 ORDER BY Id
                 OFFSET @Skip ROWS FETCH NEXT @Take ROWS ONLY";
@@ -55,7 +55,7 @@ namespace TAMHR.Hangfire.Services
                        JobCode, JobName, EmployeeGroup, EmployeeGroupText, EmployeeSubgroup, EmployeeSubgroupText,
                        WorkContract, WorkContractText, PersonalArea, PersonalSubarea, DepthLevel, Staffing,
                        Chief, OrgLevel, Vacant, Structure, ObjectDescription
-                FROM ActualOrganizationStructure
+                FROM MDM_ACTUAL_ORGANIZATION_STRUCTURE
                 WHERE 1=1 {excludeClause}
                 ORDER BY Id
                 OFFSET @Skip ROWS FETCH NEXT @Take ROWS ONLY";
@@ -70,7 +70,7 @@ namespace TAMHR.Hangfire.Services
             
             var query = $@"
                 SELECT Id, OrgCode, ObjectCode, ObjectText, ObjectDescription
-                FROM ActualEntityStructure
+                FROM MDM_ACTUAL_ENTITY_STRUCTURE
                 WHERE 1=1 {excludeClause}
                 ORDER BY Id
                 OFFSET @Skip ROWS FETCH NEXT @Take ROWS ONLY";
@@ -85,7 +85,7 @@ namespace TAMHR.Hangfire.Services
             
             var query = $@"
                 SELECT Id, ObjectID, ObjectType, Abbreviation, ObjectText, StartDate, EndDate, ObjectDescription
-                FROM OrganizationObject
+                FROM MDM_ORGANIZATION_OBJECT
                 WHERE 1=1 {excludeClause}
                 ORDER BY Id
                 OFFSET @Skip ROWS FETCH NEXT @Take ROWS ONLY";
@@ -101,7 +101,7 @@ namespace TAMHR.Hangfire.Services
             var query = $@"
                 SELECT Id, Title, EventTypeCode, StartDate, EndDate, Description, CreatedBy, CreatedOn,
                        ModifiedBy, ModifiedOn, RowStatus
-                FROM EventsCalendar
+                FROM TB_M_EVENTS_CALENDAR
                 WHERE 1=1 {excludeClause}
                 ORDER BY Id
                 OFFSET @Skip ROWS FETCH NEXT @Take ROWS ONLY";

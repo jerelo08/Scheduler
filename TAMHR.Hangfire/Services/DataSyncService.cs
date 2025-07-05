@@ -7,7 +7,7 @@ namespace TAMHR.Hangfire.Services
 {
     public interface IDataSyncService
     {
-        Task ExecuteSyncAsync();
+        void ExecuteSync();
     }
 
     public class DataSyncService : IDataSyncService
@@ -29,82 +29,77 @@ namespace TAMHR.Hangfire.Services
             _logger = logger;
         }
 
-        public async Task ExecuteSyncAsync()
+        public void ExecuteSync()
         {
             _logger.LogInformation("Starting data synchronization job");
 
             // Execute sync tasks in the specified order
-            await SyncUsersAsync();
-            await SyncActualOrgAsync();
-            await SyncActualEntityAsync();
-            await SyncOrgObjectAsync();
-            await SyncEventsCalendarAsync();
+            SyncUsersAsync();
+            SyncActualOrgAsync();
+            SyncActualEntityAsync();
+            SyncOrgObjectAsync();
+            SyncEventsCalendarAsync();
 
             _logger.LogInformation("Data synchronization job completed");
         }
 
-        private async Task SyncUsersAsync()
+        private void SyncUsersAsync()
         {
-            await SyncEntityAsync<User>(
-                "User",
-                "Sync Batch: Users",
+            SyncEntityAsync(
+                "Users",
                 async (excludeIds, skip, take) => await _repository.GetUsersAsync(excludeIds, skip, take),
                 async (batch) => await _apiClient.SendUsersAsync(batch),
                 (user) => user.Id.ToString()
-            );
+            ).GetAwaiter().GetResult();
         }
 
-        private async Task SyncActualOrgAsync()
+        private void SyncActualOrgAsync()
         {
-            await SyncEntityAsync<ActualOrganizationStructure>(
+            SyncEntityAsync(
                 "ActualOrg",
-                "Sync Batch: ActualOrg",
                 async (excludeIds, skip, take) => await _repository.GetActualOrgAsync(excludeIds, skip, take),
                 async (batch) => await _apiClient.SendActualOrgAsync(batch),
                 (org) => org.Id.ToString()
-            );
+            ).GetAwaiter().GetResult();
         }
 
-        private async Task SyncActualEntityAsync()
+        private void SyncActualEntityAsync()
         {
-            await SyncEntityAsync<ActualEntityStructure>(
+            SyncEntityAsync(
                 "ActualEntity",
-                "Sync Batch: ActualEntity",
                 async (excludeIds, skip, take) => await _repository.GetActualEntityAsync(excludeIds, skip, take),
                 async (batch) => await _apiClient.SendActualEntityAsync(batch),
                 (entity) => entity.Id.ToString()
-            );
+            ).GetAwaiter().GetResult();
         }
 
-        private async Task SyncOrgObjectAsync()
+        private void SyncOrgObjectAsync()
         {
-            await SyncEntityAsync<OrganizationObject>(
+            SyncEntityAsync(
                 "OrgObject",
-                "Sync Batch: OrgObject",
                 async (excludeIds, skip, take) => await _repository.GetOrgObjectAsync(excludeIds, skip, take),
                 async (batch) => await _apiClient.SendOrgObjectAsync(batch),
                 (obj) => obj.Id.ToString()
-            );
+            ).GetAwaiter().GetResult();
         }
 
-        private async Task SyncEventsCalendarAsync()
+        private void SyncEventsCalendarAsync()
         {
-            await SyncEntityAsync<EventsCalendar>(
+            SyncEntityAsync(
                 "EventsCalendar",
-                "Sync Batch: EventsCalendar",
                 async (excludeIds, skip, take) => await _repository.GetEventsCalendarAsync(excludeIds, skip, take),
                 async (batch) => await _apiClient.SendEventsCalendarAsync(batch),
                 (calendar) => calendar.Id.ToString()
-            );
+            ).GetAwaiter().GetResult();
         }
 
         private async Task SyncEntityAsync<T>(
             string entityType,
-            string activityName,
             Func<IEnumerable<string>, int, int, Task<IEnumerable<T>>> fetchData,
-            Func<IEnumerable<T>, Task<bool>> sendData,
+            Func<IEnumerable<T>, Task<HttpStatusCode>> sendData,
             Func<T, string> getId)
         {
+            var activityName = entityType;
             try
             {
                 _logger.LogInformation($"Starting sync for {entityType}");
@@ -140,8 +135,8 @@ namespace TAMHR.Hangfire.Services
                     try
                     {
                         // Send data to API
-                        success = await sendData(dataList);
-                        statusCode = success ? HttpStatusCode.OK : HttpStatusCode.BadRequest;
+                        statusCode = await sendData(dataList);
+                        success = statusCode == HttpStatusCode.OK ? true : false;
                     }
                     catch (Exception ex)
                     {
@@ -162,6 +157,8 @@ namespace TAMHR.Hangfire.Services
                         await _repository.AddSyncTrackingAsync(entityType, entityIds);
                         
                         totalProcessed += dataList.Count;
+                        syncedIdsList.AddRange(entityIds);
+
                         _logger.LogInformation($"Successfully synced batch of {dataList.Count} {entityType} records");
                     }
                     else
@@ -199,12 +196,12 @@ namespace TAMHR.Hangfire.Services
                     BatchSize = batchSize,
                     DurationMs = durationMs,
                     HttpResponseCode = (int?)statusCode,
-                    Timestamp = DateTime.UtcNow
+                    Timestamp = DateTime.UtcNow.AddHours(7)
                 }),
                 CreatedBy = "System",
-                CreatedOn = DateTime.UtcNow,
+                CreatedOn = DateTime.UtcNow.AddHours(7),
                 ModifiedBy = "System",
-                ModifiedOn = DateTime.UtcNow,
+                ModifiedOn = DateTime.UtcNow.AddHours(7),
                 RowStatus = true,
                 ExceptionMessage = errorMessage
             };

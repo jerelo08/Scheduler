@@ -82,7 +82,7 @@ namespace TAMHR.Hangfire
             var cronTime = app.Configuration.GetSection("CronTime").Get<CronTime>() ?? new CronTime();
             var jakartaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time"); // Jakarta timezone
             
-            recurringJobs.AddOrUpdate<DataSyncJob>("DataSyncJob", x => x.ExecuteAsync(), cronTime.DataSyncJob, new RecurringJobOptions
+            recurringJobs.AddOrUpdate<DataSyncJob>("DataSyncJob", x => x.ExecutesSync(), cronTime.DataSyncJob, new RecurringJobOptions
             {
                 TimeZone = jakartaTimeZone
             });

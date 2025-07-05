@@ -82,7 +82,7 @@ namespace TAMHR.Hangfire.Tests.Services
                           .ReturnsAsync(new List<User>());
 
             _mockApiClient.Setup(a => a.SendUsersAsync(It.IsAny<IEnumerable<User>>()))
-                         .ReturnsAsync(true);
+                         .ReturnsAsync(System.Net.HttpStatusCode.OK);
 
             _mockRepository.Setup(r => r.AddSyncTrackingAsync(It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
                           .ReturnsAsync(true);
@@ -130,7 +130,7 @@ namespace TAMHR.Hangfire.Tests.Services
             SetupEmptyResponses();
 
             _mockApiClient.Setup(a => a.SendUsersAsync(It.IsAny<IEnumerable<User>>()))
-                         .ReturnsAsync(true);
+                         .ReturnsAsync(System.Net.HttpStatusCode.OK);
 
             _mockRepository.Setup(r => r.AddSyncTrackingAsync(It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
                           .ReturnsAsync(true);
@@ -169,7 +169,7 @@ namespace TAMHR.Hangfire.Tests.Services
             SetupEmptyResponses();
 
             _mockApiClient.Setup(a => a.SendUsersAsync(It.IsAny<IEnumerable<User>>()))
-                         .ReturnsAsync(false); // Simulate API failure
+                         .ReturnsAsync(System.Net.HttpStatusCode.InternalServerError); // Simulate API failure
 
             _mockRepository.Setup(r => r.LogActivityAsync(It.IsAny<SchedulerLog>()))
                           .ReturnsAsync(true);
