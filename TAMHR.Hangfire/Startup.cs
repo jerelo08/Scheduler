@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using TAMHR.Hangfire.Extension;
 using TAMHR.Hangfire.Schedulers;
 using TAMHR.Hangfire.Service;
+using TAMHR.Hangfire.Models;
 
 namespace TAMHR.Hangfire
 {
@@ -43,6 +44,9 @@ namespace TAMHR.Hangfire
             });
             services.AddHttpContextAccessor();
 
+            // Configure data sync services
+            services.ConfigureDataSyncServices(Configuration);
+
             //Register BackgroundJob
             //services.AddTransient<IHangfireJob, HangfireJob>();
             services.AddTransient<SchedulerJob>();
@@ -74,7 +78,19 @@ namespace TAMHR.Hangfire
             var scheduler = serviceProvider.GetRequiredService<SchedulerJob>();
             scheduler.ScheduleJobs();
 
-            RecurringJob.AddOrUpdate("update-jobs", () => scheduler.ScheduleJobs(), Cron.MinuteInterval(10), TimeZoneInfo.Local);
+            // Register the new Data Sync Job with Jakarta timezone
+            var cronTime = app.Configuration.GetSection("CronTime").Get<CronTime>() ?? new CronTime();
+            var jakartaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time"); // Jakarta timezone
+            
+            recurringJobs.AddOrUpdate<DataSyncJob>("DataSyncJob", x => x.ExecuteAsync(), cronTime.DataSyncJob, new RecurringJobOptions
+            {
+                TimeZone = jakartaTimeZone
+            });
+
+            RecurringJob.AddOrUpdate("update-jobs", () => scheduler.ScheduleJobs(), "*/10 * * * *", new RecurringJobOptions
+            {
+                TimeZone = jakartaTimeZone
+            });
 
             app.Run();
         }

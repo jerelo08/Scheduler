@@ -1,5 +1,4 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -16,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{02EA68
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HangfireSchedulerApp", "HangfireSchedulerApp\HangfireSchedulerApp.csproj", "{B7FBC599-A774-4FDB-8F17-810D06BFBF50}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TAMHR.Hangfire.Tests", "TAMHR.Hangfire.Tests\TAMHR.Hangfire.Tests.csproj", "{D1E5F6A7-8B2C-4A3D-9E0F-1B2C3D4E5F67}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +40,14 @@ Global
 		{B7FBC599-A774-4FDB-8F17-810D06BFBF50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7FBC599-A774-4FDB-8F17-810D06BFBF50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7FBC599-A774-4FDB-8F17-810D06BFBF50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1E5F6A7-8B2C-4A3D-9E0F-1B2C3D4E5F67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1E5F6A7-8B2C-4A3D-9E0F-1B2C3D4E5F67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1E5F6A7-8B2C-4A3D-9E0F-1B2C3D4E5F67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1E5F6A7-8B2C-4A3D-9E0F-1B2C3D4E5F67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1E5F6A7-8B2C-4A3D-9E0F-1B2C3D4E5F67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1E5F6A7-8B2C-4A3D-9E0F-1B2C3D4E5F67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1E5F6A7-8B2C-4A3D-9E0F-1B2C3D4E5F67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1E5F6A7-8B2C-4A3D-9E0F-1B2C3D4E5F67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

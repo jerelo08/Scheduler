@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HangfireSchedulerApp\HangfireSchedulerApp.csproj" />
     <ProjectReference Include="..\TAMHR.Hangfire.Domain\TAMHR.Hangfire.Domain.csproj" />
     <ProjectReference Include="..\TAMHR.Hangfire.Service\TAMHR.Hangfire.Service.csproj" />
   </ItemGroup>
