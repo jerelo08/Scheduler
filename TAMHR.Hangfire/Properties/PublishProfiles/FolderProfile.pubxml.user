@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\Publish\SWAPPING - HANGFIRE</_PublishTargetUrl>
+    <History>True|2024-11-18T10:41:17.5706188Z;True|2024-10-30T16:10:44.8380874+07:00;True|2024-10-29T11:12:53.8523850+07:00;True|2024-10-24T14:46:57.9357587+07:00;True|2024-10-23T15:15:50.3793752+07:00;True|2024-10-02T16:04:44.4878263+07:00;True|2024-10-02T15:27:55.0800961+07:00;True|2024-10-01T20:07:24.6011565+07:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>
