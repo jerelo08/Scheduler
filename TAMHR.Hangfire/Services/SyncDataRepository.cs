@@ -112,7 +112,7 @@ namespace TAMHR.Hangfire.Services
         public async Task<IEnumerable<string>> GetSyncedEntityIdsAsync(string entityType)
         {
             using var connection = new SqlConnection(_logConnection);
-            var query = "SELECT EntityId FROM SyncTracking WHERE EntityType = @EntityType";
+            var query = "SELECT EntityId FROM TB_R_SYNC_TRACKING WHERE EntityType = @EntityType";
             return await connection.QueryAsync<string>(query, new { EntityType = entityType });
         }
 
@@ -122,7 +122,7 @@ namespace TAMHR.Hangfire.Services
             
             var values = entityIds.Select(id => $"('{entityType}', '{id}', GETUTCDATE())");
             var query = $@"
-                INSERT INTO SyncTracking (EntityType, EntityId, SyncTimestamp)
+                INSERT INTO TB_R_SYNC_TRACKING (EntityType, EntityId, SyncTimestamp)
                 VALUES {string.Join(", ", values)}";
             
             var result = await connection.ExecuteAsync(query);
@@ -132,11 +132,10 @@ namespace TAMHR.Hangfire.Services
         public async Task<bool> LogActivityAsync(SchedulerLog log)
         {
             using var connection = new SqlConnection(_logConnection);
-            
-            var query = @"
-                INSERT INTO SchedulerLog (ID, ApplicationName, LogID, LogCategory, Activity, ApplicationModule, 
-                                        IPHostName, Status, AdditionalInformation, CreatedBy, CreatedOn, 
-                                        ModifiedBy, ModifiedOn, RowStatus, ExceptionMessage)
+              var query = @"
+                INSERT INTO TB_R_Log (ID, ApplicationName, LogID, LogCategory, Activity, ApplicationModule, 
+                                    IPHostName, Status, AdditionalInformation, CreatedBy, CreatedOn, 
+                                    ModifiedBy, ModifiedOn, RowStatus, ExceptionMessage)
                 VALUES (@ID, @ApplicationName, @LogID, @LogCategory, @Activity, @ApplicationModule, 
                         @IPHostName, @Status, @AdditionalInformation, @CreatedBy, @CreatedOn, 
                         @ModifiedBy, @ModifiedOn, @RowStatus, @ExceptionMessage)";

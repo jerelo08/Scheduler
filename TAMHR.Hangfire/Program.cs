@@ -75,11 +75,7 @@ startup.Configure(app, builder.Environment, serviceProvider, recurringJobs);
 // Jalankan aplikasi
 app.Run();
 
-//public class Program
-//{
-//    public static void Main(string[] args)
-//    {
-//        BuildWebHost(args).Run();
-//    }
-//    public static IWebHost BuildWebHost(string[] args) => WebHost.CreateDefaultBuilder(args).UseStartup<Startup>().Build();
-//}
+public partial class Program
+{
+    // Make Program class accessible for testing
+}

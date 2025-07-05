@@ -57,12 +57,12 @@ The system synchronizes data in the following order:
 
 ## Database Setup
 
-### SyncTracking Table
+### TB_R_SYNC_TRACKING Table
 
 Run the SQL script in `Scripts/CreateSyncTrackingTable.sql` to create the required tracking table:
 
 ```sql
-CREATE TABLE SyncTracking (
+CREATE TABLE TB_R_SYNC_TRACKING (
     Id INT PRIMARY KEY IDENTITY(1,1),
     EntityType NVARCHAR(100) NOT NULL,
     EntityId NVARCHAR(255) NOT NULL,
@@ -95,7 +95,7 @@ CREATE TABLE SyncTracking (
 
 - View job status in Hangfire Dashboard
 - Check SchedulerLog table for detailed activity logs
-- Monitor SyncTracking table for synchronization progress
+- Monitor TB_R_SYNC_TRACKING table for synchronization progress
 
 ## Running Tests
 
@@ -107,7 +107,7 @@ dotnet test TAMHR.Hangfire.Tests
 
 1. Update connection strings in appsettings.json
 2. Configure API endpoints and batch sizes
-3. Run the SyncTracking table creation script
+3. Run the TB_R_SYNC_TRACKING table creation script
 4. Deploy the application
 5. Monitor Hangfire dashboard for job execution
 

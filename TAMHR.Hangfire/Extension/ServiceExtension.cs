@@ -7,9 +7,9 @@ using TAMHR.Hangfire.Schedulers;
 
 namespace TAMHR.Hangfire.Extension
 {
-    internal static class ServiceExtension
+    public static class ServiceExtension
     {
-        internal static void ConfigureHangfire(this IServiceCollection services)
+        public static void ConfigureHangfire(this IServiceCollection services)
         {
             services.AddHangfire(configuration => configuration
                     .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
@@ -28,7 +28,7 @@ namespace TAMHR.Hangfire.Extension
             });
         }
 
-        internal static void ConfigureDataSyncServices(this IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureDataSyncServices(this IServiceCollection services, IConfiguration configuration)
         {
             // Register configuration objects
             var syncConfig = configuration.GetSection("SyncConfiguration").Get<SyncConfiguration>() ?? new SyncConfiguration();

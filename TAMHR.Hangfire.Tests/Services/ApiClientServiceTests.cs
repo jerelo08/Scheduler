@@ -9,7 +9,7 @@ using Xunit;
 
 namespace TAMHR.Hangfire.Tests.Services
 {
-    public class ApiClientServiceTests
+    public class ApiClientServiceTests : IDisposable
     {
         private readonly Mock<HttpMessageHandler> _mockHttpMessageHandler;
         private readonly Mock<ILogger<ApiClientService>> _mockLogger;

@@ -35,9 +35,9 @@ remove the hangfireSchedulerApp Reference from the TAMHR.hangfire project. and u
 
 ### **2.4. Duplicate Prevention (Tracking)**
 
-* A new database table, SyncTracking, will be created in the database specified by LogConnection.  
-* Before fetching data for a given type (e.g., Users), the job must first query the SyncTracking table to identify the IDs of all users that have already been sent. These users should be excluded from the current run.  
-* After a batch is **successfully** sent to the third-party API, the unique identifiers of the records in that batch must be inserted into the SyncTracking table. This marks them as "sent" and prevents them from being included in future job runs.
+* A new database table, TB_R_SYNC_TRACKING, will be created in the database specified by LogConnection.  
+* Before fetching data for a given type (e.g., Users), the job must first query the TB_R_SYNC_TRACKING table to identify the IDs of all users that have already been sent. These users should be excluded from the current run.  
+* After a batch is **successfully** sent to the third-party API, the unique identifiers of the records in that batch must be inserted into the TB_R_SYNC_TRACKING table. This marks them as "sent" and prevents them from being included in future job runs.
 
 ### **2.5. Logging**
 
@@ -53,7 +53,7 @@ remove the hangfireSchedulerApp Reference from the TAMHR.hangfire project. and u
 
 * If an API call for a specific batch fails, the system should:  
   1. Log the failure in the SchedulerLog table as described above.  
-  2. **Not** mark the records in the failed batch as "sent" in the SyncTracking table. This ensures they will be picked up in the next run.  
+  2. **Not** mark the records in the failed batch as "sent" in the TB_R_SYNC_TRACKING table. This ensures they will be picked up in the next run.  
   3. The job should continue processing the remaining batches and data types. A failure in one batch should not halt the entire job.
 
 ## **3. Data Models**
@@ -207,20 +207,20 @@ The following connection strings must be added to the ConnectionStrings section 
   }  
 }
 
-### **5.2. New Table: SyncTracking**
+### **5.2. New Table: TB_R_SYNC_TRACKING**
 
 * **Database**: LogConnection  
 * **Purpose**: To track every individual record that has been successfully sent.
 
-CREATE TABLE SyncTracking (  
+CREATE TABLE TB_R_SYNC_TRACKING (  
     Id INT PRIMARY KEY IDENTITY(1,1),  
     EntityType NVARCHAR(100) NOT NULL, \-- e.g., 'User', 'ActualOrg'  
     EntityId NVARCHAR(255) NOT NULL,    \-- The primary key of the source record (string to be flexible)  
     SyncTimestamp DATETIME2 NOT NULL DEFAULT GETUTCDATE()  
 );  
 \-- Add a unique index to prevent duplicate entries and speed up lookups  
-CREATE UNIQUE INDEX UQ\_SyncTracking\_EntityType\_EntityId   
-ON SyncTracking(EntityType, EntityId);
+CREATE UNIQUE INDEX UQ\_TB_R_SYNC_TRACKING\_EntityType\_EntityId   
+ON TB_R_SYNC_TRACKING(EntityType, EntityId);
 
 ## **6. Unit Testing Requirements**
 
@@ -229,7 +229,7 @@ ON SyncTracking(EntityType, EntityId);
   * Verify that data is correctly filtered to exclude already synchronized records.  
   * Verify that data is correctly split into batches according to the configured size.  
   * Mock the API client to test both successful and failed API call scenarios.  
-  * Verify that SyncTracking and SchedulerLog are correctly updated after successful/failed calls.  
+  * Verify that TB_R_SYNC_TRACKING and SchedulerLog are correctly updated after successful/failed calls.  
 * **Tools:**  
   * Utilize the existing testing framework (e.g., xUnit, NUnit).  
   * If a mocking library (e.g., Moq, NSubstitute) is not already in the project, it should be added to facilitate effective testing of dependencies (database contexts, API clients).

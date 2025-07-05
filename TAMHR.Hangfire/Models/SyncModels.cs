@@ -98,7 +98,7 @@ namespace TAMHR.Hangfire.Models
         public string? ExceptionMessage { get; set; }
     }
 
-    public class SyncTracking
+    public class TB_R_SYNC_TRACKING
     {
         public int Id { get; set; }
         public string EntityType { get; set; }
